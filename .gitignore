@@ -1,0 +1,8 @@
+# ignore file or folder, here :
+*.exe
+*/obj/
+*/bin/
+
+# except file or folder , here :
+
+#.gitignore

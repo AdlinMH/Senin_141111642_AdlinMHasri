@@ -33,6 +33,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.lblKet = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.lblUmur = new System.Windows.Forms.Label();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.lblMaxValue = new System.Windows.Forms.Label();
@@ -43,8 +45,6 @@
             this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.label4 = new System.Windows.Forms.Label();
-            this.lblKet = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -80,6 +80,25 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Home";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // lblKet
+            // 
+            this.lblKet.AutoSize = true;
+            this.lblKet.Font = new System.Drawing.Font("Footlight MT Light", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblKet.Location = new System.Drawing.Point(132, 289);
+            this.lblKet.Name = "lblKet";
+            this.lblKet.Size = new System.Drawing.Size(0, 18);
+            this.lblKet.TabIndex = 11;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Footlight MT Light", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(22, 289);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(104, 18);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Keterangan :";
             // 
             // lblUmur
             // 
@@ -177,25 +196,6 @@
             this.imageList1.Images.SetKeyName(0, "house-icon.png");
             this.imageList1.Images.SetKeyName(1, "sborka.png");
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Footlight MT Light", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(22, 289);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(104, 18);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "Keterangan :";
-            // 
-            // lblKet
-            // 
-            this.lblKet.AutoSize = true;
-            this.lblKet.Font = new System.Drawing.Font("Footlight MT Light", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblKet.Location = new System.Drawing.Point(132, 289);
-            this.lblKet.Name = "lblKet";
-            this.lblKet.Size = new System.Drawing.Size(0, 18);
-            this.lblKet.TabIndex = 11;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -203,7 +203,7 @@
             this.ClientSize = new System.Drawing.Size(432, 393);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Latihan 1";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
