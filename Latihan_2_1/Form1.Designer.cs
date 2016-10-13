@@ -41,13 +41,13 @@
             // 
             this.monthCalendar1.CalendarDimensions = new System.Drawing.Size(2, 2);
             this.monthCalendar1.FirstDayOfWeek = System.Windows.Forms.Day.Monday;
-            this.monthCalendar1.Location = new System.Drawing.Point(15, 42);
+            this.monthCalendar1.Location = new System.Drawing.Point(32, 62);
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 0;
             // 
             // numTanggal
             // 
-            this.numTanggal.Location = new System.Drawing.Point(109, 10);
+            this.numTanggal.Location = new System.Drawing.Point(126, 30);
             this.numTanggal.Name = "numTanggal";
             this.numTanggal.Size = new System.Drawing.Size(39, 20);
             this.numTanggal.TabIndex = 1;
@@ -60,7 +60,7 @@
             // 
             // btnTambah
             // 
-            this.btnTambah.Location = new System.Drawing.Point(264, 7);
+            this.btnTambah.Location = new System.Drawing.Point(281, 27);
             this.btnTambah.Name = "btnTambah";
             this.btnTambah.Size = new System.Drawing.Size(27, 23);
             this.btnTambah.TabIndex = 3;
@@ -70,7 +70,7 @@
             // 
             // btnHapus
             // 
-            this.btnHapus.Location = new System.Drawing.Point(313, 7);
+            this.btnHapus.Location = new System.Drawing.Point(330, 27);
             this.btnHapus.Name = "btnHapus";
             this.btnHapus.Size = new System.Drawing.Size(146, 23);
             this.btnHapus.TabIndex = 4;
@@ -80,7 +80,7 @@
             // 
             // domainBulan
             // 
-            this.domainBulan.Location = new System.Drawing.Point(154, 10);
+            this.domainBulan.Location = new System.Drawing.Point(171, 30);
             this.domainBulan.Name = "domainBulan";
             this.domainBulan.Size = new System.Drawing.Size(104, 20);
             this.domainBulan.TabIndex = 5;
@@ -89,17 +89,17 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 12);
+            this.label1.Location = new System.Drawing.Point(29, 32);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 13);
+            this.label1.Size = new System.Drawing.Size(94, 13);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Tambah Hari Libur :";
+            this.label1.Text = "Tambah Hari Libur";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(475, 363);
+            this.ClientSize = new System.Drawing.Size(510, 402);
             this.Controls.Add(this.domainBulan);
             this.Controls.Add(this.btnHapus);
             this.Controls.Add(this.btnTambah);

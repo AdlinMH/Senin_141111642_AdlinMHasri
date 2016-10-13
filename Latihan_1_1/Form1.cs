@@ -40,6 +40,11 @@ namespace Latihan_1_1
                 lblKet.Text = "Kamu belum lahir!";
             else
                 lblKet.Text = "Pilihlah sesuai dengan dalam range!";
+        }
+
+        private void lblUmur_Click(object sender, EventArgs e)
+        {
+
         }       
     }
 }
