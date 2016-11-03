@@ -19,14 +19,23 @@ namespace Latihan_1_1
 
         private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)
         {
+            if (hScrollBar1.Value >= hScrollBar2.Value)
+            {
+                hScrollBar2.Value = hScrollBar1.Value;
+                lblMaxValue.Text = hScrollBar2.Value.ToString();
+            }
             lblMinValue.Text = hScrollBar1.Value.ToString();
         }
 
         private void hScrollBar2_Scroll(object sender, ScrollEventArgs e)
         {
+            if (hScrollBar2.Value <= hScrollBar1.Value)
+            {
+                hScrollBar1.Value = hScrollBar2.Value;
+                lblMinValue.Text = hScrollBar1.Value.ToString();
+            }
             lblMaxValue.Text = hScrollBar2.Value.ToString();
         }
-        
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
