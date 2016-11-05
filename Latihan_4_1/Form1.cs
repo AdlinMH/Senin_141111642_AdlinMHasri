@@ -14,6 +14,9 @@ namespace Latihan_4_1
 {
     public partial class Form1 : MetroFramework.Forms.MetroForm
     {
+        public bool isSave = true;
+        public string saveFileDirectory = "";
+
         public Form1()
         {
             InitializeComponent();
@@ -21,7 +24,6 @@ namespace Latihan_4_1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
             Color clr = new Color();
             PropertyInfo[] colors = clr.GetType().GetProperties();
             for (int i = 8; i <= 72; i++)
@@ -36,6 +38,7 @@ namespace Latihan_4_1
                 tscbFontFamily.Items.Add(font.Name);
             }
 
+            this.tscbBackColor.ComboBox.DrawMode = DrawMode.OwnerDrawFixed;
             this.tscbFontColor.ComboBox.DrawMode = DrawMode.OwnerDrawFixed;
 
             foreach (PropertyInfo color in colors)
@@ -43,6 +46,7 @@ namespace Latihan_4_1
                 if (color.PropertyType == typeof(System.Drawing.Color))
                 {
                     tscbFontColor.Items.Add(color.Name);
+                    tscbBackColor.Items.Add(color.Name);
                 }
             }
 
@@ -50,9 +54,11 @@ namespace Latihan_4_1
             tscbFontSize.SelectedIndex = 3;
             tscbFontFamily.Text = "Calibri";
             tscbFontColor.Text = "Black";
+            tscbBackColor.Text = "White";
             changeText();
             //event
             this.tscbFontColor.ComboBox.DrawItem += new DrawItemEventHandler(tscbFontColor_DrawItem);
+            this.tscbBackColor.ComboBox.DrawItem += new DrawItemEventHandler(tscbFontColor_DrawItem);
             this.rTTextBox.Focus();
         }
 
@@ -146,6 +152,7 @@ namespace Latihan_4_1
             }
             changeText(sender);
         }
+
         private void tscbFontColor_SelectedIndexChanged(object sender, EventArgs e)
         {
             ToolStripComboBox tscb = (ToolStripComboBox)sender;
@@ -155,6 +162,7 @@ namespace Latihan_4_1
             }
             rTTextBox.SelectionColor = Color.FromName(tscbFontColor.Text);
         }
+
         private void tscbFontFamily_SelectedIndexChanged(object sender, EventArgs e)
         {
             ToolStripComboBox tscb = (ToolStripComboBox)sender;
@@ -164,19 +172,68 @@ namespace Latihan_4_1
             }
             changeText(sender);
         }
+
+        private void tscbBackColor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int length = rTTextBox.SelectionLength;
+            int start = rTTextBox.SelectionStart;
+            ToolStripComboBox tscb = (ToolStripComboBox)sender;
+            if (!tscb.Focused)
+            {
+                return;
+            }
+            rTTextBox.SelectionBackColor = Color.FromName(tscbBackColor.Text);
+            rTTextBox.Select(start, length);
+        }
+
         private void tscbFontSize_LostFocus(object sender, EventArgs e)
         {
             changeText(sender);
         }
+
         private void tscbFontColor_LostFocus(object sender, EventArgs e)
         {
             rTTextBox.SelectionColor = Color.FromName(tscbFontColor.Text);
         }
+
         private void tscbFontFamily_LostFocus(object sender, EventArgs e)
         {
             changeText(sender);
         }
 
+        private void tscbBackColor_LostFocus(object sender, EventArgs e)
+        {
+            int length = rTTextBox.SelectionLength;
+            int start = rTTextBox.SelectionStart;
+            rTTextBox.SelectionBackColor = Color.FromName(tscbBackColor.Text);
+            rTTextBox.Select(start, length);
+        }
+
+       
+        private void saveFile()
+        {
+            DialogResult dr;
+            if (saveFileDirectory == "")
+            {
+                saveFileDialog1.Filter = "Text File | *.rtf";
+                dr = saveFileDialog1.ShowDialog();
+                if (dr == DialogResult.OK)
+                {
+                    rTTextBox.SaveFile(saveFileDialog1.FileName);
+                    saveFileDirectory = saveFileDialog1.FileName;
+                    this.Text = "Latihan 4_1 - " + saveFileDialog1.FileName;
+                }
+            }
+            else
+            {
+                dr = MessageBox.Show("File ini telah pernah disimpan. Apakah anda ingin menimpanya?", "Simpan File", MessageBoxButtons.YesNo);
+                if (dr == DialogResult.Yes)
+                {
+                    rTTextBox.SaveFile(saveFileDirectory);
+                }
+            }
+            isSave = true;
+        }
 
         private void changeText(object sender = null)
         {
@@ -255,6 +312,69 @@ namespace Latihan_4_1
 
             this.rTTextBox.SelectionChanged += new System.EventHandler(this.rTTextBox_SelectionChanged);
         }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dr;
+            if (!isSave)
+            {
+                dr = MessageBox.Show("Apakah Anda ingin menyimpan file terlebih dahulu?", "Simpan file", MessageBoxButtons.YesNoCancel);
+                if (dr == DialogResult.Cancel)
+                {
+                    return;
+                }
+                else if (dr == DialogResult.Yes)
+                {
+                    saveFile();
+                }
+            }
+            isSave = true;
+            saveFileDirectory = "";
+            this.Text = "Latihan 4_1";
+            rTTextBox.Rtf = "";
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+            DialogResult dr;
+            if (!isSave)
+            {
+                dr = MessageBox.Show("Apakah Anda ingin menyimpan file terlebih dahulu?", "Simpan file", MessageBoxButtons.YesNoCancel);
+                if (dr == DialogResult.Cancel)
+                {
+                    return;
+                }
+                else if (dr == DialogResult.Yes)
+                {
+                    saveFile();
+                }
+            }
+            dr = openFileDialog1.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                rTTextBox.LoadFile(openFileDialog1.FileName);
+                saveFileDirectory = openFileDialog1.FileName;
+                this.Text = "Latihan 4_1 - " + openFileDialog1.FileName;
+            }
+        }
+
+        private void rTTextBox_TextChanged(object sender, EventArgs e)
+        {
+            isSave = false;
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFile();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            this.Dispose();
+        }
+        
     }
 
 
