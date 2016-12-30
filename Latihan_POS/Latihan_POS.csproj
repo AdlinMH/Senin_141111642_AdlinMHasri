@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectionModel.cs" />
     <Compile Include="MdiForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,6 +84,18 @@
     <Compile Include="Menu\Customer.Designer.cs">
       <DependentUpon>Customer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Menu\Supplier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\Supplier.Designer.cs">
+      <DependentUpon>Supplier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\Transaksi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\Transaksi.Designer.cs">
+      <DependentUpon>Transaksi.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MdiForm.resx">
@@ -93,6 +106,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\Customer.resx">
       <DependentUpon>Customer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\Supplier.resx">
+      <DependentUpon>Supplier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\Transaksi.resx">
+      <DependentUpon>Transaksi.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -117,10 +136,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\appbar.app.favorite.png" />
+    <None Include="Resources\appbar.layer.thick.png" />
+    <None Include="Resources\appbar.clothes.tie.png" />
+    <None Include="Resources\appbar.customerservice.png" />
     <Content Include="MetroFramework.txt" />
     <None Include="Resources\bg-pemasaran3.jpg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="images\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

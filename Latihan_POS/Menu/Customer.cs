@@ -13,12 +13,8 @@ namespace Latihan_POS.Menu
 {
     public partial class Customer : MetroFramework.Forms.MetroForm
     {
-        // Database Connection
-        MySqlConnection con = new MySqlConnection("server=localhost;database=latihan_pos;Uid=root;Pwd=");
-        MySqlDataAdapter DA;
-        DataTable DT = new DataTable();
-        MySqlCommand query;
-        public string ID_costumer;
+        public ConnectionModel Ctx = new ConnectionModel();
+        public string IdCostumer;
 
         public Customer()
         {
@@ -28,17 +24,17 @@ namespace Latihan_POS.Menu
 
         private void Costumer_Load(object sender, EventArgs e)
         {
-
+            metroTabControl1.SelectTab(0);
         
         }
 
         public void view_customer()
         {
-            query = new MySqlCommand("select * from customer", con);
-            DA = new MySqlDataAdapter(query);
-            DT = new DataTable();
-            DA.Fill(DT);
-            barang_views.DataSource = DT;
+            Ctx.Query = new MySqlCommand("select * from customer", Ctx.Con);
+            Ctx.Da = new MySqlDataAdapter(Ctx.Query);
+            Ctx.Dt = new DataTable();
+            Ctx.Da.Fill(Ctx.Dt);
+            barang_views.DataSource = Ctx.Dt;
         }
 
         public void clear_customer()
@@ -55,7 +51,7 @@ namespace Latihan_POS.Menu
             this.Enokostumer.Text = "";
             this.Ekotacustomer.Text = "";
             this.Ekodeposcustomer.Text = "";
-            DateTime datenow = getdatetime();
+            DateTime datenow = Getdatetime();
         }
 
         private void barang_views_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -70,10 +66,10 @@ namespace Latihan_POS.Menu
             string nohp = this.nokostumer.Text;
             string kota = this.kotacustomer.Text;
             string kodepos = this.kodeposcustomer.Text;
-            DateTime datenow = getdatetime();
+            DateTime datenow = Getdatetime();
 
 
-            query = new MySqlCommand("INSERT INTO customer VALUES(" +
+            Ctx.Query = new MySqlCommand("INSERT INTO customer VALUES(" +
                 "@id," +
                 "@nama," +
                 "@alamat, " +
@@ -81,33 +77,33 @@ namespace Latihan_POS.Menu
                 "@kodepos, " +
                 "@nohp, " +
                 "@dateinsert, " +
-                "@dateupdate)", con);
-            query.Parameters.AddWithValue("@id", null);
-            query.Parameters.AddWithValue("@nama", nama);
-            query.Parameters.AddWithValue("@alamat", alamat);
-            query.Parameters.AddWithValue("@kodepos", kodepos);
-            query.Parameters.AddWithValue("@kota", kota);
-            query.Parameters.AddWithValue("@nohp", nohp);
-            query.Parameters.AddWithValue("@dateinsert", datenow);
-            query.Parameters.AddWithValue("@dateupdate", datenow);
+                "@dateupdate)", Ctx.Con);
+            Ctx.Query.Parameters.AddWithValue("@id", null);
+            Ctx.Query.Parameters.AddWithValue("@nama", nama);
+            Ctx.Query.Parameters.AddWithValue("@alamat", alamat);
+            Ctx.Query.Parameters.AddWithValue("@kodepos", kodepos);
+            Ctx.Query.Parameters.AddWithValue("@kota", kota);
+            Ctx.Query.Parameters.AddWithValue("@nohp", nohp);
+            Ctx.Query.Parameters.AddWithValue("@dateinsert", datenow);
+            Ctx.Query.Parameters.AddWithValue("@dateupdate", datenow);
 
             try
             {
-                con.Open();
-                query.ExecuteNonQuery();
+                Ctx.Con.Open();
+                Ctx.Query.ExecuteNonQuery();
                 MessageBox.Show("Berhasil Input Customer");
-                con.Close();
+                Ctx.Con.Close();
                 view_customer();
                 clear_customer();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                con.Close();
+                Ctx.Con.Close();
             }
         }
 
-        public static DateTime getdatetime()
+        public static DateTime Getdatetime()
         {
             DateTime getdatetime = DateTime.UtcNow;
             int year = getdatetime.Year;
@@ -122,70 +118,77 @@ namespace Latihan_POS.Menu
 
         private void cek_costumer_Click(object sender, EventArgs e)
         {
-            con.Open();
-            string id_param = this.Eidkostumer.Text;
-            query = new MySqlCommand("SELECT * FROM customer WHERE ID=@kode", con);
-            query.Parameters.AddWithValue("@kode", id_param);
-            MySqlDataReader Reader = query.ExecuteReader();
+            Ctx.Con.Open();
+            string idParam = this.Eidkostumer.Text;
+            Ctx.Query = new MySqlCommand("SELECT " +
+                                         "ID 'Kode'," +
+                                         "nama 'Nama Customer'," +
+                                         "alamat 'Alamat'," +
+                                         "kota 'Kota'," +
+                                         "kode_pos 'Kode Pos'," +
+                                         "noHp 'No Telepon'" +
+                                      "FROM customer WHERE ID=@kode", Ctx.Con);
+            Ctx.Query.Parameters.AddWithValue("@kode", idParam);
+            MySqlDataReader reader = Ctx.Query.ExecuteReader();
 
-            if (!Reader.HasRows)
+            if (!reader.HasRows)
             {
-                con.Close();
+                Ctx.Con.Close();
                 MessageBox.Show("Data Tidak Ditemukan");
                 return;
             }
-            if (Reader.Read())
+            if (reader.Read())
             {
-                this.Enamakostumer.Text = Reader["Nama"].ToString();
-                this.Ealamatkostumer.Text = Reader["Alamat"].ToString();
-                this.Ekotacustomer.Text = Reader["Kota"].ToString();
-                this.Ekodeposcustomer.Text = Reader["kode_pos"].ToString();
-                this.Enokostumer.Text = Reader["NoHp"].ToString();
+                this.Enamakostumer.Text = reader["Nama"].ToString();
+                this.Ealamatkostumer.Text = reader["Alamat"].ToString();
+                this.Ekotacustomer.Text = reader["Kota"].ToString();
+                this.Ekodeposcustomer.Text = reader["kode_pos"].ToString();
+                this.Enokostumer.Text = reader["NoHp"].ToString();
             }
-            Reader.Close();
-            con.Close();
+            reader.Close();
+            Ctx.Con.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             string nama = this.Enamakostumer.Text;
-            this.ID_costumer = this.Eidkostumer.Text;
+            this.IdCostumer = this.Eidkostumer.Text;
             string alamat = this.Ealamatkostumer.Text;
             string nohp = this.Enokostumer.Text;
             string kota = this.Ekotacustomer.Text;
             string kodepos = this.Ekodeposcustomer.Text;
-            DateTime datenow = getdatetime();
+            DateTime datenow = Getdatetime();
 
 
-            query = new MySqlCommand("UPDATE customer SET " +
+            Ctx.Query = new MySqlCommand("UPDATE customer SET " +
                     "Nama=@nama, " +
                     "Alamat=@alamat, " +
                     "kota=@kota, " +
                     "kode_pos=@kodepos, " +
                     "NoHp=@nohp, " +
                     "updated_at=@dateupdate " +
-                "WHERE ID=@id", con);
-            query.Parameters.AddWithValue("@id", this.ID_costumer);
-            query.Parameters.AddWithValue("@nama", nama);
-            query.Parameters.AddWithValue("@alamat", alamat);
-            query.Parameters.AddWithValue("@kota", kota);
-            query.Parameters.AddWithValue("@kodepos", kodepos);
-            query.Parameters.AddWithValue("@nohp", nohp);
-            query.Parameters.AddWithValue("@dateupdate", datenow);
+                "WHERE ID=@id", Ctx.Con);
+            Ctx.Query.Parameters.AddWithValue("@id", this.IdCostumer);
+            Ctx.Query.Parameters.AddWithValue("@nama", nama);
+            Ctx.Query.Parameters.AddWithValue("@alamat", alamat);
+            Ctx.Query.Parameters.AddWithValue("@kota", kota);
+            Ctx.Query.Parameters.AddWithValue("@kodepos", kodepos);
+            Ctx.Query.Parameters.AddWithValue("@nohp", nohp);
+            Ctx.Query.Parameters.AddWithValue("@dateupdate", datenow);
 
             try
             {
-                con.Open();
-                query.ExecuteNonQuery();
+                Ctx.Con.Open();
+                Ctx.Query.ExecuteNonQuery();
                 MessageBox.Show("Berhasil Update Customer");
-                con.Close();
+                Ctx.Con.Close();
                 view_customer();
                 clear_customer();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                con.Close();
+                Ctx.Con.Close();
             }
         }
 
@@ -193,22 +196,22 @@ namespace Latihan_POS.Menu
         {
             string kodebarang = this.Ekodeposcustomer.Text;
 
-            query = new MySqlCommand("DELETE FROM customer WHERE kode=@kode", con);
-            query.Parameters.AddWithValue("@kode", kodebarang);
+            Ctx.Query = new MySqlCommand("DELETE FROM customer WHERE kode=@kode", Ctx.Con);
+            Ctx.Query.Parameters.AddWithValue("@kode", kodebarang);
 
             try
             {
-                con.Open();
-                query.ExecuteNonQuery();
+                Ctx.Con.Open();
+                Ctx.Query.ExecuteNonQuery();
                 MessageBox.Show("Berhasil dihapus");
-                con.Close();
+                Ctx.Con.Close();
                 view_customer();
                 clear_customer();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                con.Close();
+                Ctx.Con.Close();
             }
         }
     }

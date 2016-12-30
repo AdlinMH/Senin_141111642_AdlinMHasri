@@ -13,11 +13,8 @@ namespace Latihan_POS.Menu
 {
     public partial class Barang : MetroFramework.Forms.MetroForm
     {
-        // Database Connection
-        MySqlConnection con = new MySqlConnection("server=localhost;database=latihan_pos;Uid=root;Pwd=");
-        MySqlDataAdapter DA;
-        DataTable DT = new DataTable();
-        MySqlCommand query;
+        public ConnectionModel Ctx = new ConnectionModel();
+
         public Barang()
         {
             InitializeComponent();
@@ -27,15 +24,22 @@ namespace Latihan_POS.Menu
         private void Barang_Load(object sender, EventArgs e)
         {
             this.barang_kode.Focus();
+            metroTabControl1.SelectTab(0);
         }
 
         public void view_barang()
         {
-            query = new MySqlCommand("SELECT * FROM barang", con);
-            DA = new MySqlDataAdapter(query);
-            DT = new DataTable();
-            DA.Fill(DT);
-            barang_views.DataSource = DT;
+            Ctx.Query = new MySqlCommand("SELECT " +
+                                         "kode 'Kode'," +
+                                         "nama 'Nama Barang'," +
+                                         "jumlah 'Kuantitas'," +
+                                         "harga_beli 'Harga Beli'," +
+                                         "harga_jual 'Harga Jual'" +
+                                     "FROM barang", Ctx.Con);
+            Ctx.Da = new MySqlDataAdapter(Ctx.Query);
+            Ctx.Dt = new DataTable();
+            Ctx.Da.Fill(Ctx.Dt);
+            barang_views.DataSource = Ctx.Dt;
         }
 
         private void clear_barang()
@@ -61,10 +65,10 @@ namespace Latihan_POS.Menu
             string stockbarang = this.barang_stock.Text;
             string hbelibarang = this.barang_hargabeli.Text;
             string hjualbarang = this.barang_hargajual.Text;
-            DateTime datenow = getdatetime();
+            DateTime datenow = Getdatetime();
 
 
-            query = new MySqlCommand("INSERT INTO barang VALUES( " +
+            Ctx.Query = new MySqlCommand("INSERT INTO barang VALUES( " +
                                      "@id,"+
                                      "@kode, " + 
                                      "@nama," + 
@@ -72,34 +76,34 @@ namespace Latihan_POS.Menu
                                      "@hargaBeli," +
                                      "@hargaJual," +
                                      "@created_at," +
-                                     "@updated_at)", con);
-            query.Parameters.AddWithValue("@id", null);
-            query.Parameters.AddWithValue("@kode", kodebarang);
-            query.Parameters.AddWithValue("@nama", namabarang);
-            query.Parameters.AddWithValue("@jumlah", stockbarang);
-            query.Parameters.AddWithValue("@hargaBeli", hbelibarang);
-            query.Parameters.AddWithValue("@hargaJual", hjualbarang);
-            query.Parameters.AddWithValue("@created_at", datenow);
-            query.Parameters.AddWithValue("@updated_at", datenow);
+                                     "@updated_at)", Ctx.Con);
+            Ctx.Query.Parameters.AddWithValue("@id", null);
+            Ctx.Query.Parameters.AddWithValue("@kode", kodebarang);
+            Ctx.Query.Parameters.AddWithValue("@nama", namabarang);
+            Ctx.Query.Parameters.AddWithValue("@jumlah", stockbarang);
+            Ctx.Query.Parameters.AddWithValue("@hargaBeli", hbelibarang);
+            Ctx.Query.Parameters.AddWithValue("@hargaJual", hjualbarang);
+            Ctx.Query.Parameters.AddWithValue("@created_at", datenow);
+            Ctx.Query.Parameters.AddWithValue("@updated_at", datenow);
 
             try
             {
-                con.Open();
-                query.ExecuteNonQuery();
+                Ctx.Con.Open();
+                Ctx.Query.ExecuteNonQuery();
                 MessageBox.Show("Berhasil Simpan Barang");
-                con.Close();
+                Ctx.Con.Close();
                 view_barang();
                 clear_barang();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                con.Close();
+                Ctx.Con.Close();
             }
 
         }
 
-        public static DateTime getdatetime()
+        public static DateTime Getdatetime()
         {
             DateTime getdatetime = DateTime.UtcNow;
             int year = getdatetime.Year;
@@ -114,27 +118,27 @@ namespace Latihan_POS.Menu
 
         private void button2_Click(object sender, EventArgs e)
         {
-            con.Open();
-            string kode_param = this.Ekodebarang.Text;
-            query = new MySqlCommand("SELECT * FROM barang WHERE kode=@kode", con);
-            query.Parameters.AddWithValue("@kode", kode_param);
-            MySqlDataReader Reader = query.ExecuteReader();
+            Ctx.Con.Open();
+            string kodeParam = this.Ekodebarang.Text;
+            Ctx.Query = new MySqlCommand("SELECT * FROM barang WHERE kode=@kode", Ctx.Con);
+            Ctx.Query.Parameters.AddWithValue("@kode", kodeParam);
+            MySqlDataReader reader = Ctx.Query.ExecuteReader();
 
-            if (!Reader.HasRows)
+            if (!reader.HasRows)
             {
-                con.Close();
+                Ctx.Con.Close();
                 MessageBox.Show("Data Tidak Ditemukan");
                 return;
             }
-            if (Reader.Read())
+            if (reader.Read())
             {
-                this.Enamabarang.Text = Reader["nama"].ToString();
-                this.Estockbarang.Text = Reader["jumlah"].ToString();
-                this.Ehargabeli.Text = Reader["harga_beli"].ToString();
-                this.Ehargajual.Text = Reader["harga_jual"].ToString();
+                this.Enamabarang.Text = reader["nama"].ToString();
+                this.Estockbarang.Text = reader["jumlah"].ToString();
+                this.Ehargabeli.Text = reader["harga_beli"].ToString();
+                this.Ehargajual.Text = reader["harga_jual"].ToString();
             }
-            Reader.Close();
-            con.Close();
+            reader.Close();
+            Ctx.Con.Close();
             //MessageBox.Show(DA..ToString());
             
         }
@@ -146,35 +150,35 @@ namespace Latihan_POS.Menu
             string stockbarang = this.Estockbarang.Text;
             string hbelibarang = this.Ehargabeli.Text;
             string hjualbarang = this.Ehargajual.Text;
-            DateTime datenow = getdatetime();
+            DateTime datenow = Getdatetime();
 
 
-            query = new MySqlCommand("UPDATE barang SET " +
+            Ctx.Query = new MySqlCommand("UPDATE barang SET " +
                     "nama=@nama," +
                     "jumlah=@jumlah, " +
                     "harga_beli=@hargabeli, " +
                     "harga_jual=@hargajual, " +
                     "updated_at=@dateupdate " +
-                "WHERE Kode=@kode", con);
-            query.Parameters.AddWithValue("@kode", kodebarang);
-            query.Parameters.AddWithValue("@nama", namabarang);
-            query.Parameters.AddWithValue("@jumlah", stockbarang);
-            query.Parameters.AddWithValue("@hargabeli", hbelibarang);
-            query.Parameters.AddWithValue("@hargajual", hjualbarang);
+                "WHERE Kode=@kode", Ctx.Con);
+            Ctx.Query.Parameters.AddWithValue("@kode", kodebarang);
+            Ctx.Query.Parameters.AddWithValue("@nama", namabarang);
+            Ctx.Query.Parameters.AddWithValue("@jumlah", stockbarang);
+            Ctx.Query.Parameters.AddWithValue("@hargabeli", hbelibarang);
+            Ctx.Query.Parameters.AddWithValue("@hargajual", hjualbarang);
 
             try
             {
-                con.Open();
-                query.ExecuteNonQuery();
+                Ctx.Con.Open();
+                Ctx.Query.ExecuteNonQuery();
                 MessageBox.Show("Berhasil Edit Barang");
-                con.Close();
+                Ctx.Con.Close();
                 view_barang();
                 clear_barang();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                con.Close();
+                Ctx.Con.Close();
             }
         }
 
@@ -192,22 +196,22 @@ namespace Latihan_POS.Menu
         {
             string kodebarang = this.Ekodebarang.Text;
 
-            query = new MySqlCommand("DELETE FROM barang WHERE kode=@kode", con);
-            query.Parameters.AddWithValue("@kode", kodebarang);
+            Ctx.Query = new MySqlCommand("DELETE FROM barang WHERE kode=@kode", Ctx.Con);
+            Ctx.Query.Parameters.AddWithValue("@kode", kodebarang);
 
             try
             {
-                con.Open();
-                query.ExecuteNonQuery();
+                Ctx.Con.Open();
+                Ctx.Query.ExecuteNonQuery();
                 MessageBox.Show("Berhasil dihapus");
-                con.Close();
+                Ctx.Con.Close();
                 view_barang();
                 clear_barang();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                con.Close();
+                Ctx.Con.Close();
             }
         }
     }
